@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Золотая пластинка</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sans:"Onest","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+}
+/* Стиль 1: «Свет» */
+body.t1{
+  --bg:#F5F2EC; --ink:#0E0E12; --ink2:#34343C; --muted:#6B6B75;
+  --mark:#D6D2FF; --btn:#0E0E12; --btn-ink:#FFFFFF; --btn-hi:#2A2A33;
+  --card:#FFFFFF; --edge:rgba(14,14,18,.16); --fill:#3D36F2;
+}
+/* Стиль 2: «Аврора» */
+body.t2{
+  --bg:#08080F; --ink:#FFFFFF; --ink2:rgba(255,255,255,.84); --muted:rgba(255,255,255,.62);
+  --mark:rgba(150,130,255,.38); --btn:#FFFFFF; --btn-ink:#0A0A12; --btn-hi:#E9E6FF;
+  --card:rgba(255,255,255,.08); --edge:rgba(255,255,255,.26); --fill:#B7AAFF;
+}
+/* Стиль 3: «Бледная точка» */
+body.t3{
+  --bg:#000000; --ink:#FFFFFF; --ink2:#D2D4DC; --muted:#9A9DA8;
+  --mark:rgba(108,180,255,.32); --btn:#FFFFFF; --btn-ink:#000000; --btn-hi:#DDEBFF;
+  --card:#0E1117; --edge:rgba(255,255,255,.22); --fill:#6CB4FF;
+}
+*{box-sizing:border-box}
+html{font-size:20px}
+body{margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font-family:var(--sans); font-weight:500; line-height:1.55; overflow-x:hidden; transition:background .6s,color .6s}
+
+/* прогресс сверху */
+.pbar{position:fixed; left:0; top:0; right:0; height:4px; z-index:6; background:transparent}
+.pbar i{display:block; height:100%; width:0; background:var(--fill); transition:width .7s cubic-bezier(.2,.7,.2,1)}
+
+/* фон Авроры */
+.aurora{position:fixed; inset:0; z-index:0; pointer-events:none; display:none; overflow:hidden}
+body.t2 .aurora{display:block}
+.aurora span{position:absolute; border-radius:50%; filter:blur(90px); opacity:.55; animation:drift 22s ease-in-out infinite alternate}
+.aurora span:nth-child(1){width:520px; height:520px; left:-120px; top:-140px; background:#6D4AFF}
+.aurora span:nth-child(2){width:460px; height:460px; right:-140px; top:18%; background:#FF4D8D; animation-duration:28s; opacity:.38}
+.aurora span:nth-child(3){width:520px; height:520px; left:20%; bottom:-260px; background:#2DD4FF; animation-duration:25s; opacity:.34}
+@keyframes drift{to{transform:translate(70px,50px) scale(1.15)}}
+
+/* звёзды только для «Бледной точки» */
+.stars{position:fixed; inset:0; z-index:0; pointer-events:none; display:none;
+  background-image:
+    radial-gradient(1px 1px at 40px 60px,#fff,transparent),
+    radial-gradient(1px 1px at 190px 170px,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 320px 90px,#fff,transparent),
+    radial-gradient(1px 1px at 410px 250px,#cfe0ff,transparent);
+  background-size:470px 300px; opacity:.5}
+body.t3 .stars{display:block}
+
+.shell{position:relative; z-index:1; max-width:640px; margin:0 auto; padding:26px 24px 140px; min-height:100vh; display:flex; flex-direction:column}
+.brand{font-weight:800; font-size:.8rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); min-height:1.4em; opacity:0; transition:opacity .5s}
+.brand.on{opacity:1}
+main{flex:1; display:flex; flex-direction:column; justify-content:center; padding-top:10px}
+.screen{animation:enter .9s cubic-bezier(.2,.7,.2,1) both}
+@keyframes enter{from{opacity:0; transform:translateY(22px)}to{opacity:1; transform:none}}
+
+h1{font-weight:800; letter-spacing:-.03em; font-size:clamp(2.5rem,9vw,3.9rem); line-height:1.02; margin:.1em 0 .35em}
+h1:focus{outline:none}
+h1 .alt{display:block; margin-top:.25em; font-size:.46em; font-weight:700; letter-spacing:-.01em; color:var(--muted)}
+.sub{font-size:1.1rem; color:var(--ink2); margin:0 0 1.6em}
+
+/* герои */
+.hero{height:210px; display:flex; align-items:center; margin-bottom:12px; position:relative}
+.orb{width:160px; height:160px; border-radius:50%; background:radial-gradient(circle at 30% 28%,#fff 0,#C9C3FF 22%,#6A63FF 58%,#2A22B8 100%); box-shadow:0 34px 70px rgba(61,54,242,.38); animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+.dotwrap{position:relative; width:100%; height:210px}
+.dotwrap .ring{position:absolute; left:50%; top:50%; border-radius:50%; border:1px solid rgba(255,255,255,.16); transform:translate(-50%,-50%)}
+.dotwrap .r1{width:90px; height:90px}
+.dotwrap .r2{width:170px; height:170px; border-color:rgba(255,255,255,.1)}
+.dotwrap .r3{width:260px; height:260px; border-color:rgba(255,255,255,.06)}
+.dotwrap .pdot{position:absolute; left:50%; top:50%; width:16px; height:16px; margin:-8px 0 0 -8px; border-radius:50%; background:#8CC6FF; box-shadow:0 0 0 6px rgba(108,180,255,.15), 0 0 40px 10px rgba(108,180,255,.55); animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 12px rgba(108,180,255,.07), 0 0 60px 16px rgba(108,180,255,.7)}}
+.nohero{height:40px}
+
+/* кнопки */
+.stack{display:grid; gap:14px}
+.btn{
+  display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+  min-height:68px; padding:14px 26px; border-radius:999px; cursor:pointer; border:none;
+  font:700 1.2rem var(--sans); background:var(--btn); color:var(--btn-ink);
+  transition:transform .25s, background .25s, opacity .25s;
+}
+.btn:hover{background:var(--btn-hi); transform:translateY(-2px)}
+.btn:focus-visible,.link:focus-visible,.check:focus-within,summary:focus-visible{outline:3px solid var(--fill); outline-offset:3px}
+.btn.off{opacity:.32; cursor:not-allowed}
+.btn.off:hover{transform:none; background:var(--btn)}
+.btn.line{background:transparent; color:var(--ink); border:2px solid var(--ink)}
+.link{background:none; border:none; color:var(--muted); font:600 1rem var(--sans); cursor:pointer; padding:14px 4px; min-height:52px; text-decoration:underline; text-underline-offset:5px}
+.hint{color:var(--ink); font-weight:700; min-height:1.6em; margin:.4rem 0}
+
+/* список на согласии */
+.points{list-style:none; padding:0; margin:0 0 1.2em}
+.points li{font-size:1.28rem; font-weight:600; line-height:1.35; padding:.55em 0; border-bottom:1px solid var(--edge)}
+.points li:last-child{border-bottom:none}
+details{margin:.2em 0 1.2em; color:var(--ink2); font-size:.95rem}
+summary{cursor:pointer; font-weight:600; font-style:italic; text-decoration:underline; text-underline-offset:5px; color:var(--ink); padding:10px 0; min-height:48px; list-style:none}
+summary::-webkit-details-marker{display:none}
+details p{margin:.5em 0}
+
+.check{display:flex; gap:16px; align-items:center; padding:18px 20px; margin:12px 0; border:2px solid var(--edge); border-radius:20px; background:var(--card); cursor:pointer; transition:border-color .25s}
+.check:has(input:checked){border-color:var(--fill)}
+.check input{appearance:none; -webkit-appearance:none; width:32px; height:32px; flex:none; border:2.5px solid var(--ink); border-radius:10px; background:transparent; cursor:pointer; display:grid; place-content:center; margin:0}
+.check input::after{content:""; width:16px; height:9px; border-left:4px solid var(--btn-ink); border-bottom:4px solid var(--btn-ink); transform:rotate(-45deg) translate(1px,-1px); opacity:0}
+.check input:checked{background:var(--btn); border-color:var(--btn)}
+.check input:checked::after{opacity:1}
+.check span{font-size:1.1rem; font-weight:600; line-height:1.35}
+
+/* задание */
+.kicker{font-weight:800; font-size:.8rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:.9em}
+.task{font-size:clamp(1.9rem,6.4vw,2.7rem); font-weight:800; letter-spacing:-.025em; line-height:1.12; margin:0 0 .5em; color:var(--ink)}
+.task2{font-size:clamp(1.25rem,4.4vw,1.6rem); font-weight:500; line-height:1.4; color:var(--ink2); margin:0 0 1.2em}
+b.m{font-weight:800; color:var(--ink); background:linear-gradient(transparent 58%, var(--mark) 58%); padding:0 .08em}
+.quiet{color:var(--muted); font-size:1.05rem; margin:0 0 1.8em}
+
+#toast{position:fixed; left:50%; bottom:100px; transform:translate(-50%,20px); background:var(--btn); color:var(--btn-ink); padding:14px 22px; border-radius:999px; font-weight:700; opacity:0; pointer-events:none; transition:all .4s; z-index:8; max-width:92vw; text-align:center}
+#toast.on{opacity:1; transform:translate(-50%,0)}
+
+.dev{position:fixed; left:0; right:0; bottom:0; z-index:7; background:#000; border-top:1px solid #333; padding:6px 10px; display:flex; gap:6px; flex-wrap:wrap; align-items:center; justify-content:center; font:12px/1.2 var(--sans); color:#bbb}
+.dev b{color:#fff; letter-spacing:.1em}
+.dev button{min-height:30px; min-width:30px; border-radius:7px; border:1px solid #555; background:#111; color:#fff; cursor:pointer; font:inherit}
+.dev button.on{background:#fff; color:#000; border-color:#fff}
+
+/* ===== Стекло ===== */
+.aurora span:nth-child(1){opacity:.7}
+.aurora span:nth-child(2){opacity:.5}
+.aurora span:nth-child(3){opacity:.46}
+.gl,.check{
+  background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.05)), rgba(12,9,32,.36);
+  -webkit-backdrop-filter:blur(28px) saturate(160%); backdrop-filter:blur(28px) saturate(160%);
+  border:1px solid rgba(255,255,255,.3);
+  box-shadow:0 24px 60px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.4);
+  border-radius:28px;
+}
+.check{border-radius:22px; box-shadow:0 14px 36px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.35)}
+.check:has(input:checked){border-color:rgba(255,255,255,.75)}
+.points.gl{padding:6px 24px; margin-bottom:14px}
+.points li{border-bottom-color:rgba(255,255,255,.22)}
+details.gl{padding:2px 22px; margin:0 0 14px; border-radius:22px}
+.taskcard{padding:28px 26px 10px; margin-bottom:22px}
+.taskcard .task2{margin-bottom:.8em}
+.btn.glassbtn{
+  background:linear-gradient(135deg, rgba(255,255,255,.26), rgba(255,255,255,.1)), rgba(12,9,32,.3);
+  -webkit-backdrop-filter:blur(24px) saturate(160%); backdrop-filter:blur(24px) saturate(160%);
+  border:1px solid rgba(255,255,255,.45); color:#fff;
+  box-shadow:0 14px 34px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn.glassbtn:hover{background:linear-gradient(135deg, rgba(255,255,255,.36), rgba(255,255,255,.16)), rgba(12,9,32,.25)}
+/* ===== Карточки ===== */
+.shell.wide{max-width:980px}
+.chip{position:sticky; top:14px; z-index:5; display:inline-block; padding:10px 20px; border-radius:999px; font-size:.95rem; margin-bottom:6px}
+.chip b{font-weight:800}
+.h-cards{font-size:clamp(1.9rem,6vw,2.6rem); margin-top:.4em}
+.grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:14px 0 28px}
+@media (min-width:720px){ .grid{grid-template-columns:repeat(3,1fr); gap:18px} }
+@media (min-width:960px){ .grid{grid-template-columns:repeat(4,1fr)} }
+button.card{
+  position:relative; display:flex; flex-direction:column; padding:10px; border-radius:26px; cursor:pointer;
+  color:#fff; font:inherit; text-align:left; border:1px solid rgba(255,255,255,.3);
+  background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.05)), rgba(12,9,32,.36);
+  -webkit-backdrop-filter:blur(20px) saturate(150%); backdrop-filter:blur(20px) saturate(150%);
+  box-shadow:0 14px 34px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .25s, box-shadow .25s, border-color .25s, opacity .25s;
+}
+button.card:hover{transform:translateY(-3px)}
+button.card:focus-visible{outline:3px solid #fff; outline-offset:3px}
+.pic{position:relative; border-radius:18px; aspect-ratio:4/3; overflow:hidden}
+.pic svg{position:absolute; inset:0; width:100%; height:100%; display:block}
+.pic .w{fill:#fff} .pic .v{fill:rgba(255,255,255,.55)} .pic .y{fill:#FFE27A} .pic .d{fill:rgba(18,12,48,.72)}
+.pic .sw{fill:none; stroke:#fff; stroke-width:3; stroke-linecap:round; stroke-linejoin:round}
+.pic .sd{fill:none; stroke:rgba(18,12,48,.72); stroke-width:3; stroke-linecap:round}
+.pic .sy{fill:none; stroke:#FFE27A; stroke-width:3; stroke-linecap:round}
+.pic text{font-family:var(--sans); font-weight:800}
+.cap{padding:10px 6px 6px; font-weight:700; font-size:.95rem; line-height:1.25; min-height:3.9em; display:flex; align-items:center}
+.pic .w{fill:url(#gw)} .pic .v{fill:url(#gv)} .pic .y{fill:url(#gy)} .pic .d{fill:url(#gd)}
+.pic svg{filter:drop-shadow(0 3px 3px rgba(20,10,70,.34))}
+.pic::after{content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+  background:radial-gradient(120% 85% at 18% 0%, rgba(255,255,255,.3), rgba(255,255,255,0) 55%), linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(10,5,40,.22));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.tick{position:absolute; z-index:2; top:8px; right:8px; width:32px; height:32px; border-radius:50%; background:#fff; color:#14102b; display:grid; place-items:center; font-weight:800; font-size:1.05rem; transform:scale(0); transition:transform .25s cubic-bezier(.3,1.6,.5,1); box-shadow:0 4px 14px rgba(0,0,0,.35)}
+button.card[aria-pressed="true"]{border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.95), 0 20px 44px rgba(0,0,0,.42); transform:translateY(-3px)}
+button.card[aria-pressed="true"] .tick{transform:scale(1)}
+.grid.full button.card[aria-pressed="false"]{opacity:.5}
+.dock{position:sticky; bottom:var(--dockb,78px); z-index:6; display:flex; align-items:center; gap:16px; padding:14px 18px; border-radius:26px; flex-wrap:wrap}
+.dock .info{flex:1; min-width:150px}
+.dock .count{font-weight:700; font-size:1rem; margin-bottom:6px}
+.dots{display:flex; gap:7px}
+.dots i{width:13px; height:13px; border-radius:50%; background:rgba(255,255,255,.28); transition:background .25s, transform .25s}
+.dots i.on{background:#fff; transform:scale(1.15)}
+.dock .btn{width:auto; min-width:170px; min-height:58px; flex:none}
+/* ===== Возраст и итог ===== */
+.opts{display:grid; gap:12px; margin:12px 0 24px}
+.opt{display:flex; align-items:center; justify-content:space-between; gap:14px; min-height:64px; padding:14px 22px; border-radius:22px; color:#fff; font:700 1.15rem var(--sans); cursor:pointer; text-align:left; transition:transform .25s, box-shadow .25s, border-color .25s}
+.opt:hover{transform:translateY(-2px)}
+.opt:focus-visible{outline:3px solid #fff; outline-offset:3px}
+.opt::after{content:""; width:26px; height:26px; flex:none; border-radius:50%; border:2.5px solid #fff}
+.opt[aria-checked="true"]{border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.95), 0 18px 40px rgba(0,0,0,.4)}
+.opt[aria-checked="true"]::after{background:radial-gradient(circle,#fff 0 38%, #8F7BFF 41%)}
+.mgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0 28px}
+@media (min-width:720px){ .mgrid{grid-template-columns:repeat(4,1fr)} }
+.mini{display:flex; flex-direction:column; padding:8px; border-radius:22px; border:1px solid rgba(255,255,255,.3);
+  background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.05)), rgba(12,9,32,.36);
+  -webkit-backdrop-filter:blur(20px) saturate(150%); backdrop-filter:blur(20px) saturate(150%)}
+.mini .cap{min-height:3.4em; font-size:.9rem; padding:8px 4px 4px}
+.mini.top{box-shadow:0 0 0 3px rgba(255,255,255,.9)}
+.demo-tag{display:inline-block; padding:7px 14px; border-radius:999px; background:#FFE27A; color:#1a1405; font-weight:800; font-size:.8rem; letter-spacing:.06em; margin:4px 0 8px}
+.panel2{padding:22px 24px; margin:0 0 18px}
+.panel2 h2{font-size:1.5rem; font-weight:800; letter-spacing:-.02em; margin:0 0 .4em}
+.panel2 p{margin:.6em 0}
+.matchline{font-weight:800; font-size:1.2rem; margin:10px 0 0}
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation:none !important; transition:none !important} }
+</style>
+</head>
+<body class="t1">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="gw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E3DDFF"/></linearGradient>
+  <linearGradient id="gv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".78"/><stop offset="1" stop-color="#FFFFFF" stop-opacity=".42"/></linearGradient>
+  <linearGradient id="gy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF0AE"/><stop offset="1" stop-color="#FFC23D"/></linearGradient>
+  <linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E2268" stop-opacity=".85"/><stop offset="1" stop-color="#150E3D" stop-opacity=".9"/></linearGradient>
+</defs></svg>
+<div class="pbar" aria-hidden="true"><i id="pfill"></i></div>
+<div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="stars" aria-hidden="true"></div>
+<div class="shell">
+  <div class="brand" id="brand">Золотая пластинка</div>
+  <main id="app"></main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const T = {
+  ru:{
+    brand:"Золотая пластинка", back:"Назад",
+    wH:"Прежде чем начать",
+    points:["Научное исследование на четыре минуты.","Без имени, почты и адреса вашего устройства.","Закрыть страницу можно в любой момент."],
+    more:"Подробнее об участии",
+    moreP:["Правильных и неправильных ответов нет. Участие добровольное. Если вы закроете страницу до конца, неполные ответы мы не используем.","Вам предстоит собрать небольшую капсулу из карточек. Результаты изучаются только в обобщённом виде.","Ответы сохраняются в таблице Google, на серверах Google, и используются только для научного анализа."],
+    chk18:"Мне 18 лет или больше", chkOk:"Я прочитал(а) это и согласен(на) участвовать",
+    hint:"Отметьте оба пункта, чтобы продолжить", start:"Начать",
+    contact:"Автор исследования: [контакт будет здесь]",
+    kicker:"Ваша капсула",
+    tasks:[
+      ["Соберите капсулу для <b class='m'>соседа по дому</b>.","Он откроет её <b class='m'>через неделю</b> и <b class='m'>сможет вам ответить</b>."],
+      ["Соберите капсулу для <b class='m'>людей будущего</b>.","Они откроют её <b class='m'>через 1000 лет</b> и <b class='m'>не смогут вам ответить</b>."],
+      ["Соберите капсулу для <b class='m'>неизвестной цивилизации</b>.","Она в 10 000 световых лет от Земли, откроет капсулу <b class='m'>через 10 000 лет</b> и <b class='m'>не сможет вам ответить</b>."]
+    ],
+    quiet:"Выберите семь карточек из сорока.", go:"К карточкам", stub:"В прототипе экранов с карточками пока нет."
+  },
+  kk:{
+    brand:"Алтын пластинка", back:"Артқа",
+    wH:"Бастамас бұрын",
+    points:["Төрт минутқа арналған ғылыми зерттеу.","Атыңыз, поштаңыз және құрылғыңыздың мекенжайы сұралмайды.","Бетті кез келген уақытта жаба аласыз."],
+    more:"Қатысу туралы толығырақ",
+    moreP:["Дұрыс немесе бұрыс жауап жоқ. Қатысу ерікті. Бетті соңына дейін жауып тастасаңыз, аяқталмаған жауаптарды пайдаланбаймыз.","Сізге карточкалардан шағын капсула жинау керек. Нәтижелер тек жиынтық түрде зерттеледі.","Жауаптар Google кестесінде, Google серверлерінде сақталады және тек ғылыми талдау үшін қолданылады."],
+    chk18:"Мен 18 жастамын немесе одан үлкенмін", chkOk:"Мен мұны оқыдым және қатысуға келісемін",
+    hint:"Жалғастыру үшін екі тармақты да белгілеңіз", start:"Бастау",
+    contact:"Зерттеу авторы: [байланыс осында болады]",
+    kicker:"Сіздің капсулаңыз",
+    tasks:[
+      ["<b class='m'>Көршіңізге</b> арналған капсула жинаңыз.","Ол оны <b class='m'>бір аптадан кейін</b> ашады және сізге <b class='m'>жауап бере алады</b>."],
+      ["<b class='m'>Болашақ адамдарға</b> арналған капсула жинаңыз.","Олар оны <b class='m'>1000 жылдан кейін</b> ашады және сізге <b class='m'>жауап бере алмайды</b>."],
+      ["<b class='m'>Белгісіз өркениетке</b> арналған капсула жинаңыз.","Ол Жерден 10 000 жарық жылы қашықтықта, капсуланы <b class='m'>10 000 жылдан кейін</b> ашады және сізге <b class='m'>жауап бере алмайды</b>."]
+    ],
+    quiet:"Қырық карточкадан жеті карточканы таңдаңыз.", go:"Карточкаларға өту", stub:"Прототипте карточкалар экраны әзірге жоқ."
+  }
+};
+
+Object.assign(T.ru, {
+  done2:"Вы уже прошли это исследование. Спасибо за участие!",
+  cH:"Выберите семь карточек", cHint:"Нажмите на карточку, чтобы выбрать. Нажмите ещё раз, чтобы убрать.",
+  chip:"Капсула для:", chips:["соседа по дому","людей будущего","неизвестной цивилизации"],
+  sel:n=>`Выбрано ${n} из 7`, done:"Готово", full:"Уже выбрано семь. Уберите одну, чтобы выбрать другую.",
+  stub2:"Дальше экран с возрастом (в прототипе его пока нет)"
+});
+Object.assign(T.kk, {
+  done2:"Сіз бұл зерттеуге қатысып қойдыңыз. Қатысқаныңыз үшін рахмет!",
+  cH:"Жеті карточканы таңдаңыз", cHint:"Таңдау үшін карточканы басыңыз. Алып тастау үшін қайта басыңыз.",
+  chip:"Капсула кімге:", chips:["көршіге","болашақ адамдарға","белгісіз өркениетке"],
+  sel:n=>`Таңдалды: ${n} / 7`, done:"Дайын", full:"Жеті карточка таңдалды. Басқасын таңдау үшін біреуін алып тастаңыз.",
+  stub2:"Әрі қарай жас тобы экраны (прототипте әзірге жоқ)"
+});
+
+Object.assign(T.ru, {
+  aK:"Один вопрос", aH:"Последний вопрос", aP:"К какой возрастной группе вы относитесь? Это нужно только для сравнения групп.",
+  ages:["18–24","25–34","35–44","45–54","55–64","65 и старше","Не хочу отвечать"], fin:"Завершить",
+  rH:"Ваша капсула готова", rSub:"Спасибо, что участвовали. Вы выбрали:",
+  gH:"Капсула всех участников", gNo:"Пока участников мало. Общая капсула появится, когда мы соберём достаточно ответов.",
+  demo:"ДЕМО · пример оформления, не настоящие данные", match:k=>`Ваш выбор совпал с общей капсулой на ${k} из 7`,
+  dH:"Немного о том, что мы изучаем",
+  dP:["Каждому участнику случайно назначали получателя капсулы: соседа, людей будущего или далёкую цивилизацию. Мы сравниваем, как это меняет выбор карточек и насколько похожи капсулы разных людей.","Пожалуйста, не рассказывайте знакомым, какой вариант попался вам, пока идёт сбор. Результаты будут опубликованы в открытом доступе."],
+  youHad:"Вам попался получатель:", who:["сосед по дому","люди будущего","неизвестная цивилизация"]
+});
+Object.assign(T.kk, {
+  aK:"Бір сұрақ", aH:"Соңғы сұрақ", aP:"Қай жас тобына жатасыз? Бұл тек топтарды салыстыру үшін керек.",
+  ages:["18–24","25–34","35–44","45–54","55–64","65 және одан үлкен","Жауап бергім келмейді"], fin:"Аяқтау",
+  rH:"Сіздің капсулаңыз дайын", rSub:"Қатысқаныңыз үшін рахмет. Сіз таңдадыңыз:",
+  gH:"Барлық қатысушылардың капсуласы", gNo:"Әзірге қатысушылар аз. Жеткілікті жауап жиналған соң жалпы капсула пайда болады.",
+  demo:"ДЕМО · безендіру үлгісі, нақты деректер емес", match:k=>`Таңдауыңыз жалпы капсуламен 7-ден ${k} бойынша сәйкес келді`,
+  dH:"Біз не зерттейтініміз туралы",
+  dP:["Әр қатысушыға капсула алушы кездейсоқ тағайындалды: көрші, болашақ адамдар немесе алыстағы өркениет. Біз бұл карточкаларды таңдауға қалай әсер ететінін және әртүрлі адамдардың капсулалары қаншалықты ұқсас екенін салыстырамыз.","Жинау жүріп жатқанда, сізге қандай нұсқа түскенін таныстарыңызға айтпаңыз. Нәтижелер ашық қолжетімділікте жарияланады."],
+  youHad:"Сізге түскен алушы:", who:["көрші","болашақ адамдар","белгісіз өркениет"]
+});
+let age = null, showDemo = false, startedAt = Date.now();
+const DEMO_TOP = [4,6,7,15,21,23,16];
+
+/* ===== Отправка записи в Google Таблицу (Apps Script) ===== */
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwSYN67KZtWU15VvIOrpY3zkZImXAMPy7YF50krdpyiGO7iqF42J7wCM2ucPMyvRj7e/exec';   // адрес веб-приложения Google Apps Script (аккаунт akedil30)
+const SECRET   = 'h2b3sj4ej9fpv9p4ie4kc75j';   // та же случайная строка, что в скрипте таблицы (защита от случайного мусора, не пароль)
+const TEST = new URLSearchParams(location.search).has('test');   // ?test=1: тестовый режим (ver=TEST, без защиты от повторов)
+const SITE_VER = TEST ? 'TEST' : 'v1';
+async function sendRecord(rec){
+  console.log('RECORD:', rec);
+  if(!ENDPOINT){ console.log('ENDPOINT не задан: запись никуда не отправлена (режим прототипа)'); return 'dry'; }
+  const opts = { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({...rec, key:SECRET}), keepalive:true };
+  try{ const r = await fetch(ENDPOINT, opts); const j = await r.json(); return j.ok ? 'ok' : 'rejected'; }
+  catch(e){ try{ await fetch(ENDPOINT, {...opts, mode:'no-cors'}); return 'sent-unconfirmed'; }catch(e2){ return 'failed'; } }
+}
+function newPid(){ try{ return crypto.randomUUID(); }catch(e){ return String(Math.random()).slice(2) + Date.now(); } }
+function alreadyDone(){ if(TEST) return false; try{ return !!ENDPOINT && localStorage.getItem('gp_done') === '1'; }catch(e){ return false; } }
+function markDone(){ try{ localStorage.setItem('gp_done','1'); }catch(e){} }
+
+/* 40 карточек: ru, kk (черновик, проверить), cat (для анализа, участнику не видна), svg */
+const S = x => `<svg viewBox="0 0 120 90" aria-hidden="true" focusable="false">${x}</svg>`;
+const CARDS = [
+ /* природа и космос */
+ {cat:"nat", ru:"Гроза над морем", kk:"Теңіз үстіндегі найзағай", svg:S(`<path class="v" d="M0 70q10-8 20 0t20 0 20 0 20 0 20 0 20 0V90H0z"/><circle class="w" cx="44" cy="32" r="13"/><circle class="w" cx="62" cy="26" r="17"/><circle class="w" cx="82" cy="33" r="12"/><rect class="w" x="36" y="32" width="54" height="13" rx="6.5"/><path class="y" d="M66 46L53 66h9l-5 16 20-24h-10l6-12z"/>`)},
+ {cat:"nat", ru:"Ночное небо без городских огней", kk:"Қала шамдарынсыз түнгі аспан", svg:S(`<circle class="w" cx="20" cy="18" r="1.8"/><circle class="w" cx="45" cy="30" r="1.4"/><circle class="w" cx="100" cy="24" r="1.8"/><circle class="w" cx="30" cy="48" r="1.2"/><circle class="w" cx="68" cy="14" r="1.4"/><circle class="w" cx="108" cy="46" r="1.2"/><path class="y" d="M80 18a20 20 0 1 0 15 34 16 16 0 0 1-15-34z"/><path class="d" d="M0 72Q34 54 64 68T120 62V90H0z"/>`)},
+ {cat:"nat", ru:"Запах дождя на земле", kk:"Жерге жауған жаңбырдың иісі", svg:S(`<circle class="w" cx="42" cy="22" r="11"/><circle class="w" cx="60" cy="17" r="14"/><circle class="w" cx="78" cy="23" r="10"/><rect class="w" x="34" y="22" width="52" height="11" rx="5.5"/><g class="sw" style="stroke:rgba(255,255,255,.65)"><path d="M46 40v8M60 38v10M74 40v8M53 52v6M67 52v6"/></g><path class="d" d="M0 70h120v20H0z"/><path class="sy" d="M60 70V58"/><path class="y" d="M60 60c-10 0-14-6-14-10 9 0 14 4 14 10zM60 58c8 0 12-5 12-9-8 0-12 4-12 9z"/>`)},
+ {cat:"nat", ru:"Одинокое дерево на холме", kk:"Төбедегі жалғыз ағаш", svg:S(`<circle class="y" cx="94" cy="20" r="9"/><path class="d" d="M0 68Q40 46 78 64T120 60V90H0z"/><rect class="v" x="56" y="40" width="5" height="24" rx="2.5"/><circle class="w" cx="58.5" cy="34" r="14"/>`)},
+ {cat:"nat", ru:"Земля из космоса", kk:"Ғарыштан көрінген Жер", svg:S(`<circle cx="60" cy="45" r="28" fill="#2F86F0" stroke="rgba(255,255,255,.8)" stroke-width="2.5"/><path d="M44 36q8-8 16-2t0 10-12 4-4-12zM66 52q8-2 12 4t-4 10-10-6z" fill="#5FDB8F"/><path class="sw" style="stroke-width:2.2;stroke:rgba(255,255,255,.8)" d="M42 54q8 4 14 0M62 30q8-4 14 2"/><circle class="y" cx="16" cy="16" r="1.8"/><circle class="w" cx="102" cy="22" r="1.6"/><circle class="w" cx="22" cy="70" r="1.4"/><circle class="y" cx="104" cy="70" r="1.8"/>`)},
+ /* близкие и любовь */
+ {cat:"love", ru:"Объятие после долгой разлуки", kk:"Ұзақ айырылыстан кейінгі құшақ", svg:S(`<ellipse cx="60" cy="84" rx="36" ry="3.5" fill="rgba(20,10,70,.25)"/><path class="v" d="M24 86q-2-28 20-32h12v32z"/><path class="w" d="M96 86q2-28-20-32H64v32z"/><circle class="v" cx="46" cy="38" r="12"/><circle class="w" cx="74" cy="40" r="12"/><path class="sw" style="stroke-width:7" d="M34 66q26 14 52 0"/><path class="sw" style="stroke-width:6;stroke:rgba(255,255,255,.7)" d="M38 75q22 9 44 0"/><path class="sd" style="stroke-width:1.8" d="M41 38q2-2 4 0M69 40q2-2 4 0"/><circle cx="40" cy="43" r="2.4" fill="#FF8FB1" opacity=".85"/><circle cx="80" cy="45" r="2.4" fill="#FF8FB1" opacity=".85"/><path class="y" d="M60 12c-3-5-11-2-8 4 2 3 8 7 8 7s6-4 8-7c3-6-5-9-8-4z"/>`)},
+ {cat:"love", ru:"Колыбельная", kk:"Бесік жыры", svg:S(`<path class="y" d="M84 14a22 22 0 1 0 16 38 18 18 0 0 1-16-38z"/><g class="w"><circle cx="32" cy="64" r="6"/><rect x="36.5" y="34" width="3.5" height="30"/><path d="M40 34q10 2 12 14-6-6-12-6z"/><circle cx="58" cy="72" r="5"/><rect x="62" y="48" width="3" height="24"/><path d="M65 48q8 2 9 11-5-5-9-5z"/></g><circle class="w" cx="14" cy="20" r="1.6"/><circle class="w" cx="64" cy="14" r="1.4"/><circle class="w" cx="104" cy="70" r="1.4"/>`)},
+ {cat:"love", ru:"Семейный стол", kk:"Отбасылық дастархан", svg:S(`<path class="sd" d="M60 4v14"/><path class="y" d="M42 34a18 18 0 0 1 36 0z"/><circle class="w" cx="34" cy="52" r="8"/><circle class="w" cx="60" cy="48" r="8"/><circle class="w" cx="86" cy="52" r="8"/><path class="v" d="M24 74q0-14 10-14t10 14zM50 70q0-14 10-14t10 14zM76 74q0-14 10-14t10 14z"/><rect class="w" x="14" y="68" width="92" height="8" rx="4"/><rect class="d" x="24" y="76" width="5" height="12" rx="2"/><rect class="d" x="91" y="76" width="5" height="12" rx="2"/>`)},
+ {cat:"love", ru:"Первый поцелуй", kk:"Алғашқы сүйіс", svg:S(`<ellipse cx="60" cy="84" rx="34" ry="3.5" fill="rgba(20,10,70,.25)"/><path class="w" d="M24 86q0-26 18-30l10 2v28z"/><path class="v" d="M96 86q0-26-18-30l-10 2v28z"/><circle class="w" cx="47" cy="42" r="12"/><circle class="v" cx="73" cy="42" r="12"/><circle cx="41" cy="46" r="2.6" fill="#FF8FB1" opacity=".85"/><circle cx="79" cy="46" r="2.6" fill="#FF8FB1" opacity=".85"/><path class="sd" style="stroke-width:1.8" d="M44 41q2-2 4 0M72 41q2-2 4 0"/><path d="M60 50c-1.5-2.5-5.5-1-4 2 1 1.5 4 3.5 4 3.5s3-2 4-3.5c1.5-3-2.5-4.5-4-2z" fill="#FF6FA5"/><path class="y" d="M60 14c-3-5-11-2-8 4 2 3 8 7 8 7s6-4 8-7c3-6-5-9-8-4z"/>`)},
+ {cat:"love", ru:"Рука друга в трудную минуту", kk:"Қиын сәттегі дос қолы", svg:S(`<ellipse cx="60" cy="84" rx="38" ry="3.5" fill="rgba(20,10,70,.25)"/><g class="d" style="opacity:.8"><circle cx="30" cy="14" r="6"/><circle cx="40" cy="10" r="7"/><circle cx="50" cy="14" r="6"/><rect x="25" y="12" width="30" height="8" rx="4"/></g><path class="sd" style="stroke-width:2;opacity:.8" d="M32 25v4M40 25v6M48 25v4"/><path class="v" d="M14 86q-1-24 17-27h14v27z"/><path class="w" d="M106 86q1-24-17-27H75v27z"/><circle class="v" cx="38" cy="44" r="11"/><circle class="w" cx="82" cy="44" r="11"/><path class="sw" style="stroke-width:8" d="M84 64Q62 58 44 64"/><path class="sd" style="stroke-width:1.8" d="M33 46q2 2 4 0M42 46q2 2 4 0M77 44q2-2 4 0M85 44q2-2 4 0"/><path class="y" d="M60 28c-3-5-11-2-8 4 2 3 8 7 8 7s6-4 8-7c3-6-5-9-8-4z"/>`)},
+ /* знание и техника */
+ {cat:"know", ru:"Доказательство, что простых чисел бесконечно много", kk:"Жай сандардың шексіз екенін дәлелдеу", svg:S(`<text class="w" x="60" y="30" font-size="16" text-anchor="middle">2 3 5 7 11</text><text class="v" x="60" y="48" font-size="12" text-anchor="middle">13 17 19 23 …</text><circle class="sy" style="stroke-width:5" cx="46" cy="68" r="11"/><circle class="sy" style="stroke-width:5" cx="74" cy="68" r="11"/>`)},
+ {cat:"know", ru:"Телескоп", kk:"Телескоп", svg:S(`<g transform="rotate(-28 60 40)"><rect class="w" x="30" y="32" width="56" height="14" rx="4"/><rect class="v" x="22" y="34" width="10" height="10" rx="3"/><rect class="y" x="84" y="30" width="8" height="18" rx="3"/></g><path class="sd" d="M56 52L42 82M60 52v30M64 52l14 30"/><circle class="w" cx="20" cy="18" r="1.6"/><circle class="w" cx="100" cy="14" r="1.6"/><circle class="y" cx="104" cy="60" r="1.6"/>`)},
+ {cat:"know", ru:"Первая печатная книга", kk:"Алғашқы баспа кітап", svg:S(`<path class="w" d="M60 24Q40 16 14 22v48q26-6 46 2z"/><path class="v" d="M60 24q20-8 46-2v48q-26-6-46 2z"/><path class="sd" style="opacity:.35;stroke-width:2" d="M24 34q16-3 28 1M24 44q16-3 28 1M24 54q16-3 28 1M68 35q12-4 28-1M68 45q12-4 28-1"/><path class="y" d="M82 20v22l5-4 5 4V19z"/>`)},
+ {cat:"know", ru:"Интернет", kk:"Интернет", svg:S(`<circle class="sw" cx="60" cy="45" r="26"/><path class="sw" style="stroke-width:2" d="M34 45h52M60 19c-14 14-14 38 0 52M60 19c14 14 14 38 0 52"/><circle class="y" cx="34" cy="45" r="4.5"/><circle class="y" cx="86" cy="45" r="4.5"/><circle class="y" cx="60" cy="19" r="4.5"/><circle class="y" cx="60" cy="71" r="4.5"/>`)},
+ {cat:"know", ru:"Вакцина", kk:"Вакцина", svg:S(`<g transform="rotate(-35 60 45)"><rect class="w" x="38" y="36" width="42" height="18" rx="5"/><rect class="v" x="22" y="43" width="18" height="4" rx="2"/><rect class="w" x="16" y="37" width="5" height="16" rx="2.5"/><path class="sw" d="M80 45h20"/><rect class="y" x="44" y="40" width="22" height="10" rx="3"/></g><path class="sy" style="stroke-width:4.5" d="M96 62v16M88 70h16"/>`)},
+ /* искусство и игра */
+ {cat:"art", ru:"Смех друзей", kk:"Достардың күлкісі", svg:S(`<circle class="w" cx="30" cy="48" r="17"/><circle class="w" cx="60" cy="40" r="19"/><circle class="w" cx="92" cy="48" r="17"/><g class="sd" style="stroke-width:2.5"><path d="M23 44q3-4 6 0M33 44q3-4 6 0M24 55q6 8 12 0"/><path d="M52 36q3-4 6 0M62 36q3-4 6 0M52 46q8 10 16 0"/><path d="M85 44q3-4 6 0M95 44q3-4 6 0M86 55q6 8 12 0"/></g><path class="y" d="M60 8l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>`)},
+ {cat:"art", ru:"Песня, которую поют все вместе", kk:"Бәрі бірге айтатын ән", svg:S(`<g class="w"><circle cx="22" cy="60" r="8"/><circle cx="42" cy="54" r="9"/><circle cx="64" cy="50" r="10"/><circle cx="86" cy="54" r="9"/><circle cx="104" cy="60" r="8"/></g><g class="v"><path d="M12 86q0-16 10-16t10 16zM32 86q0-16 10-16t10 16zM54 86q0-16 10-16t10 16zM76 86q0-16 10-16t10 16zM94 86q0-16 10-16t10 16z"/></g><g class="y"><circle cx="54" cy="22" r="6"/><rect x="58.5" y="6" width="3" height="16"/><path d="M61 6q9 2 10 11-5-5-10-5z"/><circle cx="78" cy="30" r="5"/><rect x="81.5" y="16" width="2.5" height="14"/></g>`)},
+ {cat:"art", ru:"Рисунок ребёнка", kk:"Баланың суреті", svg:S(`<rect class="w" x="22" y="12" width="76" height="66" rx="6" transform="rotate(-3 60 45)"/><g transform="rotate(-3 60 45)"><circle cx="82" cy="28" r="7" fill="#FFB020"/><path d="M36 62V46l18-14 18 14v16z" fill="none" stroke="#5B6CFF" stroke-width="3" stroke-linejoin="round"/><rect x="48" y="52" width="10" height="10" rx="1" fill="#FF6FA5"/><path d="M28 66h60" stroke="#2FBF8F" stroke-width="3" stroke-linecap="round"/></g>`)},
+ {cat:"art", ru:"Шахматная партия", kk:"Шахмат партиясы", svg:S(`<g class="w"><rect x="26" y="20" width="17" height="17"/><rect x="60" y="20" width="17" height="17"/><rect x="43" y="37" width="17" height="17"/><rect x="77" y="37" width="17" height="17"/><rect x="26" y="54" width="17" height="17"/><rect x="60" y="54" width="17" height="17"/></g><g class="v"><rect x="43" y="20" width="17" height="17"/><rect x="77" y="20" width="17" height="17"/><rect x="26" y="37" width="17" height="17"/><rect x="60" y="37" width="17" height="17"/><rect x="43" y="54" width="17" height="17"/><rect x="77" y="54" width="17" height="17"/></g><g class="d"><circle cx="68.5" cy="41" r="5"/><path d="M62 54q1-8 6.5-8t6.5 8z"/></g>`)},
+ {cat:"art", ru:"Футбольный матч во дворе", kk:"Аулада футбол ойыны", svg:S(`<path class="d" d="M0 74h120v16H0z"/><path class="sw" style="stroke:rgba(255,255,255,.5);stroke-width:2" d="M12 74V40h24V74M108 74V40H84V74"/><circle class="w" cx="60" cy="52" r="17"/><path class="d" d="M60 44l7 5-3 8h-8l-3-8z"/><path class="sd" style="stroke-width:2" d="M60 44v-8M67 49l7-4M64 57l5 6M56 57l-5 6M53 49l-7-4"/>`)},
+ /* достижения */
+ {cat:"ach", ru:"Первый шаг человека по Луне", kk:"Адамның Айдағы алғашқы қадамы", svg:S(`<circle class="v" cx="96" cy="18" r="9"/><path class="d" d="M0 72Q60 56 120 72V90H0z"/><circle class="w" cx="56" cy="30" r="11"/><circle class="y" cx="58" cy="30" r="6.5"/><rect class="w" x="45" y="40" width="22" height="24" rx="8"/><rect class="w" x="46" y="62" width="8" height="12" rx="3"/><rect class="w" x="58" y="62" width="8" height="12" rx="3"/><path class="sw" style="stroke-width:2.5" d="M84 72V44"/><path class="y" d="M84 44h16l-4 5 4 5H84z"/>`)},
+ {cat:"ach", ru:"Вершина горы после подъёма", kk:"Көтерілгеннен кейінгі тау шыңы", svg:S(`<path class="v" d="M0 78L36 38l22 26 16-18 46 32z"/><path class="w" d="M20 78L58 22l48 56z"/><path class="sw" style="stroke-width:2.5" d="M58 22V8"/><path class="y" d="M58 8h14l-3 4 3 4H58z"/>`)},
+ {cat:"ach", ru:"Мост через реку", kk:"Өзеннен өтетін көпір", svg:S(`<circle class="y" cx="100" cy="20" r="8"/><path class="v" d="M0 70q10-6 20 0t20 0 20 0 20 0 20 0 20 0V90H0z"/><path class="w" d="M8 58h104v6H8z"/><path class="sw" d="M16 58Q60 14 104 58"/><path class="sw" style="stroke-width:2" d="M30 46v12M44 36v22M60 32v26M76 36v22M90 46v12"/>`)},
+ {cat:"ach", ru:"Финиш марафона", kk:"Марафон мәресі", svg:S(`<rect class="d" x="16" y="18" width="5" height="64" rx="2.5"/><rect class="d" x="99" y="18" width="5" height="64" rx="2.5"/><rect class="w" x="21" y="18" width="78" height="16"/><g class="d"><rect x="26" y="18" width="8" height="8"/><rect x="42" y="18" width="8" height="8"/><rect x="58" y="18" width="8" height="8"/><rect x="74" y="18" width="8" height="8"/><rect x="34" y="26" width="8" height="8"/><rect x="50" y="26" width="8" height="8"/><rect x="66" y="26" width="8" height="8"/><rect x="82" y="26" width="8" height="8"/></g><path class="sy" style="stroke-width:4" d="M12 70h96"/>`)},
+ {cat:"ach", ru:"Победа после поражения", kk:"Жеңілістен кейінгі жеңіс", svg:S(`<path class="y" d="M42 20h36v18a18 18 0 0 1-36 0z"/><path class="sy" style="stroke-width:4" d="M42 26h-8q0 14 12 16M78 26h8q0 14-12 16"/><rect class="y" x="56" y="52" width="8" height="12"/><rect class="w" x="44" y="64" width="32" height="8" rx="3"/><path class="w" d="M94 20l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><circle class="w" cx="22" cy="30" r="2"/>`)},
+ /* трудное */
+ {cat:"hard", ru:"Могила с цветами", kk:"Гүлі бар қабір", svg:S(`<path class="d" d="M0 74h120v16H0z"/><path class="w" d="M42 74V36a18 18 0 0 1 36 0v38z"/><path class="sd" style="stroke-width:3;opacity:.4" d="M52 40h16M52 48h16M52 56h16"/><path class="sw" style="stroke-width:2;stroke:rgba(255,255,255,.55)" d="M28 74V70M36 74V66M94 74V68M86 74V72"/><circle class="y" cx="28" cy="69" r="4"/><circle class="y" cx="36" cy="65" r="4"/><circle class="y" cx="94" cy="67" r="4"/><circle class="y" cx="86" cy="71" r="3.5"/>`)},
+ {cat:"hard", ru:"Больничная палата ночью", kk:"Түнгі аурухана палатасы", svg:S(`<rect class="v" x="10" y="8" width="34" height="34" rx="6"/><path class="y" d="M26 15a9 9 0 1 0 8 14 7 7 0 0 1-8-14z"/><rect class="w" x="14" y="58" width="92" height="12" rx="4"/><rect class="v" x="18" y="48" width="22" height="10" rx="5"/><rect class="d" x="14" y="70" width="4" height="12" rx="2"/><rect class="d" x="102" y="70" width="4" height="12" rx="2"/><path class="sy" style="stroke-width:2.5" d="M58 30h8l4-8 6 14 4-6h10"/>`)},
+ {cat:"hard", ru:"Человек один у окна ночью", kk:"Түнде терезе алдындағы жалғыз адам", svg:S(`<rect class="sw" x="22" y="10" width="76" height="70" rx="6"/><path class="sw" style="stroke-width:2" d="M60 10v70M22 45h76"/><path class="y" d="M82 20a8 8 0 1 0 7 12 6 6 0 0 1-7-12z"/><circle class="y" cx="70" cy="62" r="1.5"/><circle class="y" cx="80" cy="68" r="1.5"/><circle class="d" cx="42" cy="58" r="6"/><path class="d" d="M32 80q0-14 10-14t10 14z"/>`)},
+ {cat:"hard", ru:"Прощание на вокзале", kk:"Вокзалдағы қоштасу", svg:S(`<path class="d" d="M0 78h120v12H0z"/><rect class="w" x="40" y="26" width="70" height="40" rx="8"/><g class="y"><rect x="48" y="34" width="12" height="12" rx="2"/><rect x="66" y="34" width="12" height="12" rx="2"/><rect x="84" y="34" width="12" height="12" rx="2"/></g><circle class="d" cx="52" cy="72" r="5"/><circle class="d" cx="96" cy="72" r="5"/><circle class="w" cx="18" cy="48" r="6"/><path class="w" d="M10 78q0-18 8-18t8 18z"/><path class="sw" d="M24 58l8-12"/>`)},
+ {cat:"hard", ru:"Руки очень старого человека", kk:"Өте қарт адамның қолдары", svg:S(`<rect class="w" x="42" y="46" width="36" height="36" rx="12"/><rect class="w" x="42" y="26" width="8" height="34" rx="4"/><rect class="w" x="51" y="18" width="8" height="42" rx="4"/><rect class="w" x="60" y="16" width="8" height="44" rx="4"/><rect class="w" x="69" y="22" width="8" height="38" rx="4"/><rect class="w" x="31.5" y="49" width="9" height="26" rx="4.5" transform="rotate(-30 36 62)"/><path class="sd" style="stroke-width:1.7;opacity:.4" d="M47 60h26M47 68h20M46.5 36v8M55.5 30v10M64.5 28v10M73.5 34v8"/>`)},
+ /* жестокость */
+ {cat:"cruel", ru:"Руины города после войны", kk:"Соғыстан кейінгі қала қирандылары", svg:S(`<path class="d" d="M0 80h120v10H0z"/><path class="w" d="M10 80V44l10-6 8 8v34zM34 80V30l8 6 6-10 8 12 6-4v46zM68 80V52l10-8 6 10 8-6v32zM94 80V58l8-4 10 6v20z"/><circle class="v" cx="44" cy="20" r="7"/><circle class="v" cx="54" cy="12" r="5"/><circle class="v" cx="86" cy="32" r="6"/><g class="d" style="opacity:.35"><rect x="14" y="52" width="5" height="6"/><rect x="40" y="46" width="5" height="6"/><rect x="40" y="60" width="5" height="6"/><rect x="74" y="60" width="5" height="6"/></g>`)},
+ {cat:"cruel", ru:"Вырубленный лес", kk:"Кесілген орман", svg:S(`<path class="d" d="M0 74h120v16H0z"/><path class="v" d="M8 80q6-4 8-30h28q2 26 8 30z"/><ellipse class="y" cx="30" cy="50" rx="14" ry="5"/><ellipse cx="30" cy="50" rx="7" ry="2.4" fill="none" stroke="#C9A53A" stroke-width="1.4"/><path class="v" d="M48 80q8-4 10-42h28q2 38 10 42z"/><ellipse class="y" cx="72" cy="38" rx="14" ry="5"/><ellipse cx="72" cy="38" rx="7" ry="2.4" fill="none" stroke="#C9A53A" stroke-width="1.4"/><path class="v" d="M92 80q4-3 5-22h14q1 19 5 22z"/><ellipse class="y" cx="104" cy="58" rx="7.5" ry="3.2"/>`)},
+ {cat:"cruel", ru:"Драка толпы", kk:"Топтың төбелесі", svg:S(`<path class="y" d="M60 18l7 14 15-6-6 15 14 8-15 5 2 16-13-10-13 10 2-16-15-5 14-8-6-15 15 6z"/><circle class="w" cx="20" cy="46" r="8"/><path class="w" d="M8 80q0-16 12-16t12 16z"/><circle class="w" cx="100" cy="46" r="8"/><path class="w" d="M88 80q0-16 12-16t12 16z"/><path class="sw" d="M32 64l12-10M88 64L76 54"/>`)},
+ {cat:"cruel", ru:"Пустая тарелка голодного", kk:"Аш адамның бос табағы", svg:S(`<rect class="d" x="0" y="66" width="120" height="24" style="opacity:.5"/><ellipse class="w" cx="60" cy="56" rx="30" ry="9"/><ellipse class="v" cx="60" cy="54" rx="20" ry="5.5"/><g class="sw" style="stroke-width:2.5"><path d="M18 34v34M14 34v10q0 5 4 5t4-5V34M100 32c6 6 6 22 0 30M100 32v36"/></g>`)},
+ {cat:"cruel", ru:"Тюремная решётка", kk:"Түрме торы", svg:S(`<rect class="d" x="10" y="4" width="100" height="82" rx="8"/><path d="M36 62V34a24 24 0 0 1 48 0v28z" fill="#CFE4FF"/><circle class="y" cx="70" cy="30" r="8"/><path class="sd" style="stroke-width:4;opacity:.92" d="M48 12v50M60 8v54M72 12v50"/><rect class="d" x="32" y="60" width="56" height="6" rx="2"/><path class="v" style="opacity:.6" d="M34 86l10-18h32l10 18z"/>`)},
+ /* будничное */
+ {cat:"mund", ru:"Утренний кофе", kk:"Таңертеңгі кофе", svg:S(`<path class="y" d="M30 70a30 30 0 0 1 60 0z" style="opacity:.9"/><path class="w" d="M38 46h40v18a14 14 0 0 1-14 14H52a14 14 0 0 1-14-14z"/><path class="sw" style="stroke-width:4" d="M78 52h4a7 7 0 0 1 0 14h-6"/><path class="sw" style="stroke:rgba(255,255,255,.6)" d="M50 38q-4-6 0-10t0-8M62 38q-4-6 0-10t0-8"/>`)},
+ {cat:"mund", ru:"Очередь в магазине", kk:"Дүкендегі кезек", svg:S(`<g class="w"><circle cx="20" cy="40" r="7"/><circle cx="46" cy="40" r="7"/><circle cx="72" cy="40" r="7"/></g><g class="v"><path d="M10 80q0-26 10-26t10 26zM36 80q0-26 10-26t10 26zM62 80q0-26 10-26t10 26z"/></g><rect class="y" x="90" y="46" width="22" height="34" rx="4"/><rect class="d" x="94" y="52" width="14" height="8" rx="2" style="opacity:.35"/>`)},
+ {cat:"mund", ru:"Пробка на дороге", kk:"Жолдағы кептеліс", svg:S(`<path class="d" d="M0 66h120v24H0z" style="opacity:.55"/><g><rect class="w" x="6" y="44" width="34" height="16" rx="6"/><rect class="w" x="12" y="36" width="20" height="12" rx="5"/><rect class="v" x="44" y="44" width="34" height="16" rx="6"/><rect class="v" x="50" y="36" width="20" height="12" rx="5"/><rect class="w" x="82" y="44" width="34" height="16" rx="6"/><rect class="w" x="88" y="36" width="20" height="12" rx="5"/></g><g class="d"><circle cx="16" cy="62" r="4.5"/><circle cx="32" cy="62" r="4.5"/><circle cx="54" cy="62" r="4.5"/><circle cx="70" cy="62" r="4.5"/><circle cx="92" cy="62" r="4.5"/><circle cx="108" cy="62" r="4.5"/></g><circle class="y" cx="36" cy="51" r="2.5"/><circle class="y" cx="74" cy="51" r="2.5"/><circle class="y" cx="112" cy="51" r="2.5"/>`)},
+ {cat:"mund", ru:"Скучная работа", kk:"Жалықтыратын жұмыс", svg:S(`<rect class="v" x="30" y="14" width="60" height="38" rx="5"/><rect class="d" x="35" y="19" width="50" height="28" rx="3" style="opacity:.45"/><rect class="v" x="54" y="52" width="12" height="8"/><rect class="w" x="22" y="60" width="76" height="8" rx="4"/><circle class="y" cx="104" cy="24" r="9"/><path class="sd" style="stroke-width:2.2;opacity:.8" d="M104 24v-5M104 24l4 3"/><text class="w" x="60" y="40" font-size="14" text-anchor="middle">z z z</text>`)},
+ {cat:"mund", ru:"Мытьё посуды", kk:"Ыдыс жуу", svg:S(`<ellipse class="w" cx="50" cy="60" rx="26" ry="6"/><ellipse class="v" cx="50" cy="54" rx="26" ry="6"/><ellipse class="w" cx="50" cy="48" rx="26" ry="6"/><g class="v"><circle cx="84" cy="40" r="7"/><circle cx="96" cy="52" r="5"/><circle cx="76" cy="54" r="4"/><circle cx="100" cy="32" r="3.5"/></g><path class="sw" style="stroke-width:5" d="M16 30V18q0-6 8-6h14"/><path class="sy" d="M38 14v10"/><rect class="w" x="12" y="66" width="96" height="14" rx="5"/>`)}
+];
+const HUES = [["#8A6BFF","#3B2DB5"],["#FF6FA5","#B0338F"],["#2FD2E6","#1E6FD0"],["#FFB057","#F2554E"],["#4FD6A1","#1B8C8F"],["#5C8CFF","#3A3FC6"]];
+let order = null; const picked = new Set();
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+const TOTAL = 6;
+let screen = 0, lang = null, style = 2, group = Math.floor(Math.random()*3);
+let ok18 = false, okConsent = false;
+const app = document.getElementById('app');
+const brand = document.getElementById('brand');
+const toastEl = document.getElementById('toast');
+const pfill = document.getElementById('pfill');
+const t = () => T[lang || 'ru'];
+function toast(msg){ toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(()=>toastEl.classList.remove('on'), 2600); }
+
+function hero(){
+  if(style === 1) return `<div class="hero"><div class="orb"></div></div>`;
+  if(style === 3) return `<div class="hero"><div class="dotwrap"><div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div><div class="pdot"></div></div></div>`;
+  return `<div class="nohero"></div>`;
+}
+
+function render(){
+  document.body.className = 't' + style;
+  document.querySelector('.shell').classList.toggle('wide', screen === 3);
+  document.documentElement.lang = lang || 'ru';
+  brand.textContent = t().brand;
+  brand.classList.toggle('on', screen > 0);
+  pfill.style.width = (screen === 0 ? 0 : ((screen+1)/TOTAL*100)) + '%';
+
+  if(alreadyDone() && screen < 5){
+    app.innerHTML = `<section class="screen"><h1 class="h-cards" tabindex="-1">${t().done2}</h1></section>`;
+    return;
+  }
+
+  if(screen === 0){
+    app.innerHTML = `
+      <section class="screen">
+        ${hero()}
+        <h1 tabindex="-1">Золотая пластинка<span class="alt">Алтын пластинка</span></h1>
+        <p class="sub">Исследование на четыре минуты · Төрт минутқа арналған зерттеу</p>
+        <div class="stack">
+          <button class="btn glassbtn" data-lang="ru">Русский</button>
+          <button class="btn glassbtn" data-lang="kk">Қазақша</button>
+        </div>
+      </section>`;
+    app.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; screen=1; render(); });
+  }
+  else if(screen === 1){
+    const L = t();
+    app.innerHTML = `
+      <section class="screen">
+        <h1 tabindex="-1">${L.wH}</h1>
+        <ul class="points gl">${L.points.map(x=>`<li>${x}</li>`).join('')}</ul>
+        <details class="gl"><summary>${L.more}</summary>${L.moreP.map(x=>`<p>${x}</p>`).join('')}<p>${L.contact}</p></details>
+        <label class="check"><input type="checkbox" id="c18" ${ok18?'checked':''}><span>${L.chk18}</span></label>
+        <label class="check"><input type="checkbox" id="cok" ${okConsent?'checked':''}><span>${L.chkOk}</span></label>
+        <div class="hint" id="hint"></div>
+        <button class="btn off" id="startBtn" aria-disabled="true">${L.start}</button>
+        <button class="link" id="backBtn">← ${L.back}</button>
+      </section>`;
+    const c18 = app.querySelector('#c18'), cok = app.querySelector('#cok'),
+          btn = app.querySelector('#startBtn'), hint = app.querySelector('#hint');
+    const sync = ()=>{
+      ok18 = c18.checked; okConsent = cok.checked;
+      const ready = ok18 && okConsent;
+      btn.classList.toggle('off', !ready); btn.setAttribute('aria-disabled', String(!ready));
+      if(ready) hint.textContent = '';
+    };
+    c18.onchange = cok.onchange = sync; sync();
+    btn.onclick = ()=>{ if(!(ok18 && okConsent)){ hint.textContent = L.hint; return; } screen = 2; render(); };
+    app.querySelector('#backBtn').onclick = ()=>{ screen = 0; render(); };
+  }
+  else if(screen === 2){
+    const L = t(), g = L.tasks[group];
+    app.innerHTML = `
+      <section class="screen">
+        <div class="gl taskcard">
+          <div class="kicker">${L.kicker}</div>
+          <h1 class="task" tabindex="-1" style="font-size:clamp(1.9rem,6.4vw,2.7rem);letter-spacing:-.025em;line-height:1.12;margin:0 0 .5em">${g[0]}</h1>
+          <p class="task2">${g[1]}</p>
+        </div>
+        <p class="quiet">${L.quiet}</p>
+        <button class="btn" id="goBtn">${L.go} →</button>
+        <button class="link" id="backBtn">← ${L.back}</button>
+      </section>`;
+    app.querySelector('#goBtn').onclick = ()=>{ screen = 3; render(); };
+    app.querySelector('#backBtn').onclick = ()=>{ screen = 1; render(); };
+  }
+  if(screen === 3){
+    const L = t(); if(!order) order = shuffle([...Array(CARDS.length).keys()]);
+    const card = i => {
+      const c = CARDS[i], h = HUES[(i*5) % 6], on = picked.has(i);
+      return `<button class="card" data-i="${i}" aria-pressed="${on}">
+        <div class="pic" style="background:linear-gradient(160deg,${h[0]},${h[1]})">${c.svg}<span class="tick" aria-hidden="true">✓</span></div>
+        <div class="cap">${lang==='kk' ? c.kk : c.ru}</div></button>`;
+    };
+    app.innerHTML = `
+      <section class="screen">
+        <div class="chip gl">${L.chip} <b>${L.chips[group]}</b></div>
+        <h1 class="h-cards" tabindex="-1">${L.cH}</h1>
+        <p class="sub" style="margin-bottom:.4em">${L.cHint}</p>
+        <div class="grid" id="grid">${order.map(card).join('')}</div>
+        <div class="dock gl">
+          <div class="info"><div class="count" id="count"></div><div class="dots" id="dots" aria-hidden="true">${'<i></i>'.repeat(7)}</div></div>
+          <button class="btn off" id="doneBtn" aria-disabled="true">${L.done} →</button>
+        </div>
+      </section>`;
+    const grid = app.querySelector('#grid'), cnt = app.querySelector('#count'),
+          dots = app.querySelectorAll('#dots i'), done = app.querySelector('#doneBtn');
+    const sync = () => {
+      cnt.textContent = L.sel(picked.size);
+      dots.forEach((d,k)=>d.classList.toggle('on', k < picked.size));
+      grid.classList.toggle('full', picked.size >= 7);
+      const ready = picked.size === 7;
+      done.classList.toggle('off', !ready); done.setAttribute('aria-disabled', String(!ready));
+    };
+    grid.onclick = e => {
+      const b = e.target.closest('.card'); if(!b) return;
+      const i = +b.dataset.i;
+      if(picked.has(i)){ picked.delete(i); b.setAttribute('aria-pressed','false'); }
+      else if(picked.size >= 7){ toast(L.full); return; }
+      else { picked.add(i); b.setAttribute('aria-pressed','true'); }
+      sync();
+    };
+    done.onclick = () => { if(picked.size === 7){ screen = 4; render(); } };
+    sync();
+  }
+  if(screen === 4){
+    const L = t();
+    app.innerHTML = `
+      <section class="screen">
+        <div class="kicker">${L.aK}</div>
+        <h1 class="h-cards" tabindex="-1">${L.aH}</h1>
+        <p class="sub">${L.aP}</p>
+        <div class="opts" role="radiogroup" aria-label="${L.aH}">
+          ${L.ages.map((o,k)=>`<button class="opt gl" role="radio" aria-checked="${age===k}" data-k="${k}">${o}</button>`).join('')}
+        </div>
+        <button class="btn off" id="finBtn" aria-disabled="true">${L.fin} →</button>
+        <button class="link" id="backBtn">← ${L.back}</button>
+      </section>`;
+    const fin = app.querySelector('#finBtn');
+    const syncA = () => { const ready = age !== null; fin.classList.toggle('off', !ready); fin.setAttribute('aria-disabled', String(!ready)); };
+    app.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      age = +b.dataset.k;
+      app.querySelectorAll('.opt').forEach(x => x.setAttribute('aria-checked', String(+x.dataset.k === age)));
+      syncA();
+    });
+    fin.onclick = () => {
+      if(age === null) return;
+      const rec = { ver:SITE_VER, pid:newPid(), group, lang, ageBand:age, picks:[...picked], order:[...order],
+                    ms:Date.now()-startedAt, device: innerWidth < 720 ? 'phone' : 'desktop' };
+      window.__record = rec;
+      fin.classList.add('off');
+      sendRecord(rec).then(st => { window.__sendStatus = st; if(st === 'ok' || st === 'sent-unconfirmed') markDone(); });
+      screen = 5; render();
+    };
+    app.querySelector('#backBtn').onclick = () => { screen = 3; render(); };
+    syncA();
+  }
+  if(screen === 5){
+    const L = t(), mine = [...picked], top = showDemo ? DEMO_TOP : null;
+    const tile = (i, cls='') => { const c = CARDS[i], h = HUES[(i*5) % 6];
+      return `<div class="mini ${cls}"><div class="pic" style="background:linear-gradient(160deg,${h[0]},${h[1]})">${c.svg}</div><div class="cap">${lang==='kk' ? c.kk : c.ru}</div></div>`; };
+    const overlap = top ? mine.filter(i => top.includes(i)).length : 0;
+    app.innerHTML = `
+      <section class="screen">
+        <h1 class="h-cards" tabindex="-1">${L.rH}</h1>
+        <p class="sub">${L.rSub}</p>
+        <div class="mgrid">${mine.map(i => tile(i, top && top.includes(i) ? 'top' : '')).join('')}</div>
+        <div class="gl panel2">
+          <h2>${L.gH}</h2>
+          ${top ? `<span class="demo-tag">${L.demo}</span><div class="mgrid" style="margin-bottom:8px">${top.map(i => tile(i)).join('')}</div><div class="matchline">${L.match(overlap)}</div>` : `<p>${L.gNo}</p>`}
+        </div>
+        <div class="gl panel2">
+          <h2>${L.dH}</h2>
+          ${L.dP.map(x => `<p>${x}</p>`).join('')}
+          <p><b>${L.youHad}</b> ${L.who[group]}.</p>
+          <p class="small">${L.contact}</p>
+        </div>
+      </section>`;
+  }
+  const h = app.querySelector('h1'); if(h) h.focus({preventScroll:true});
+}
+
+render();
+</script>
+</body>
+</html>
